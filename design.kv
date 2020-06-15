@@ -1,0 +1,72 @@
+<MainScreen>:
+    name:"name"
+    canvas.before:
+        BorderImage:
+            border: 10, 10, 10, 10
+            source: 'static/main_screen.jpeg'
+            pos: self.pos
+            size: self.size
+
+    GridLayout:
+        cols:1
+        padding:15,15
+        spacing:20,20
+        RelativeLayout:
+            Label:
+                id:if_no_quote
+                text:""
+                color: 1,0,0,1
+                pos_hint:{"center_x":0.5,"center_y":0.65}
+
+            TextInput:
+                id: quote
+                hint_text:"Type Quote Here (use '|' for new line)"
+                text:""
+                halign: 'center'
+                size_hint:0.9,0.2
+                pos_hint:{"center_x":0.5,"center_y":0.5}
+
+            Spinner:
+                id: position
+                text: "Center"
+                values: ["Center","Bottom","Top"]
+                background_color: 0,0,0,1
+                size_hint:0.9,0.1
+                pos_hint:{"center_x":0.5,"center_y":0.35}
+
+            Button:
+                text:"Select Image"
+                background_color: 0,0,0,1
+                size_hint:0.9,0.1
+                pos_hint:{"center_x":0.5,"center_y":0.25}
+                on_press:root.show_files()
+
+            Button:
+                text:"Submit"
+                background_color: 0,0,0,1
+                size_hint:0.9,0.1
+                pos_hint:{"center_x":0.5,"center_y":0.1}
+                on_press:root.download(root.ids.quote.text,root.ids.position.text)
+
+<LoadImage>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            filters: [lambda folder, filename: filename.endswith(('jpeg','.png','.jpg'))]
+        BoxLayout:
+            size_hint_y: None
+            height: 40
+            Button:
+                text: "Cancel"
+                on_press:root.cancel()
+            Button:
+                text: "Load"
+                on_press:root.load(filechooser.selection)
+
+
+<RootWidget>:
+    MainScreen:
+        name:"main_screen"
